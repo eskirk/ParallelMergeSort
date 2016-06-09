@@ -66,20 +66,19 @@ void setupChildren(int *left, int *right, int size, int *fdsL, int *fdsR, int *p
    waitpid(pidL, NULL, 0);
    waitpid(pidR, NULL, 0);
    count = 0;
-   pidL = pidR = '\0';
    read(fdsR[0], &pidR, sizeof(int));
    read(fdsL[0], &pidL, sizeof(int));
    while (count < size) {
       if (pidL <= pidR) {
          temp[count++] = pidL;
          bits = read(fdsL[0], &pidL, sizeof(int));
-         if (bits == 0) 
+         if (!bits) 
             pidL = INT_MAX;
       }
       else if (pidR < pidL) {
          temp[count++] = pidR;
          bits = read(fdsR[0], &pidR, sizeof(int));
-         if (bits == 0) 
+         if (!bits) 
             pidR = INT_MAX;
       }
    }
